@@ -10,6 +10,7 @@ export class PokemonHttpClient extends Effect.Service<PokemonHttpClient>()("Poke
     const getPokemonById = (id: number) =>
       pipe(
         config.getPokemonUrl(),
+        Effect.tap((x) => console.log(x)),
         Effect.flatMap((baseUrl) => httpClient.get(`${baseUrl}api/v1/pokemon/${id.toString()}`)),
         Effect.tap((x) => console.log(x)),
         Effect.flatMap((response) =>
