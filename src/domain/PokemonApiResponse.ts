@@ -14,7 +14,12 @@ export const PokemonSchema = Schema.Struct({
   sprites: Schema.Struct({
     regular: Schema.String,
     shiny: Schema.String,
-    gmax: Schema.NullOr(Schema.String)
+    gmax: Schema.NullOr(
+      Schema.Struct({
+        regular: Schema.String,
+        shiny: Schema.String
+      })
+    )
   }),
   types: Schema.Array(
     Schema.Struct({
@@ -44,22 +49,26 @@ export const PokemonSchema = Schema.Struct({
   ),
   evolution: Schema.Struct({
     pre: Schema.NullOr(Schema.Unknown), // null ou autre objet inconnu
-    next: Schema.Array(
-      Schema.Struct({
-        pokedex_id: Schema.Number,
-        name: Schema.String,
-        condition: Schema.String
-      })
+    next: Schema.NullOr(
+      Schema.Array(
+        Schema.Struct({
+          pokedex_id: Schema.Number,
+          name: Schema.String,
+          condition: Schema.String
+        })
+      )
     ),
     mega: Schema.NullOr(Schema.Unknown)
   }),
   height: Schema.String,
   weight: Schema.String,
   egg_groups: Schema.Array(Schema.String),
-  sexe: Schema.Struct({
-    male: Schema.Number,
-    female: Schema.Number
-  }),
+  sexe: Schema.NullOr(
+    Schema.Struct({
+      male: Schema.Number,
+      female: Schema.Number
+    })
+  ),
   catch_rate: Schema.Number,
   level_100: Schema.Number,
   formes: Schema.NullOr(Schema.Unknown)
