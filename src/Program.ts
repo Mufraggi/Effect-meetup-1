@@ -19,7 +19,7 @@ const FullLayer = Layer.mergeAll(
 
 const program = Effect.gen(function*() {
   const client = yield* PokemonHttpClient
-  const pikachu = yield* client.getPokemonById(340)
+  const pikachu = yield* client.getPokemonById(6)
 
   console.log("⚡", pikachu.name, pikachu.height)
 })
