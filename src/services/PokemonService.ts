@@ -1,6 +1,4 @@
-import type { HttpClientError } from "@effect/platform/HttpClientError"
 import { Effect, pipe } from "effect"
-import type { ParseError } from "effect/ParseResult"
 import {
   Attack,
   CatchRate,
@@ -32,7 +30,7 @@ export class PokemonService extends Effect.Service<PokemonService>()("PokemonSer
 
     const syncPokemon = (
       id: PokedexId
-    ): Effect.Effect<{ pokedexId: PokedexId }, HttpClientError | ParseError, PokemonRepository | PokemonHttpClient> =>
+    ) =>
       pipe(
         pokeClient.getPokemonById(id),
         Effect.map((raw) => ({
@@ -62,7 +60,7 @@ export class PokemonService extends Effect.Service<PokemonService>()("PokemonSer
           catchRate: CatchRate.make(raw.catch_rate)
         } satisfies PokemonCreateModel)),
         Effect.flatMap((pokemon) => pokeRepository.insert(pokemon)),
-        Effect.map((res) => ({ pokedexId: res.pokedexId }))
+        Effect.map((res) => ({ id: res.pokedexId }))
       )
     return { syncPokemon }
   }),

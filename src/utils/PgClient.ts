@@ -1,19 +1,24 @@
+import { PlatformConfigProvider } from "@effect/platform"
+import { NodeContext } from "@effect/platform-node"
 import { PgClient } from "@effect/sql-pg"
+import { Config, Effect, identity, Layer, Redacted, String } from "effect"
+import * as path from "node:path"
 
-import { Effect, identity, Redacted, String } from "effect"
-
-import { ConfigService } from "./Config.js"
-
-export class ClientPg extends Effect.Service<ClientPg>()("PgCleint", {
-  effect: Effect.gen(function*() {
-    const configService = yield* ConfigService
-
-    const { database, dbName, env, password, port, username } = yield* configService.getSqlConfig()
+export const PgLive = Layer.unwrapEffect(
+  Effect.gen(function*() {
+    const database = yield* Config.string("DB_HOST")
+    const username = yield* Config.string("DB_USER")
+    const port = yield* Config.string("DB_PORT")
+    const password = yield* Config.string("DB_PWD")
+    const dbName = yield* Config.string("DB_NAME")
+    const env = yield* Config.string("ENV")
+    console.log(env)
     const url = `postgres://${username}:${password}@${database}:${port}/${dbName}`
     let ssl = false
-    if (env === "production" || database.includes("azure.com")) {
+    if (env === "production") {
       ssl = true
     }
+      console.log(url)
     return PgClient.layer({
       url: Redacted.make(url),
       ssl,
@@ -45,6 +50,8 @@ export class ClientPg extends Effect.Service<ClientPg>()("PgCleint", {
         }
       }
     })
-  }),
-  dependencies: [ConfigService.Default]
-}) {}
+  })
+).pipe(
+  Layer.provide(PlatformConfigProvider.layerDotEnv(path.join(process.cwd(), ".env"))),
+  Layer.provide(NodeContext.layer)
+)
