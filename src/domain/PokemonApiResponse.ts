@@ -66,7 +66,7 @@ export const PokemonSchema = Schema.Struct({
       multiplier: Schema.Number
     })
   ),
-  evolution: Schema.Struct({
+  evolution: Schema.NullOr(Schema.Struct({
     pre: Schema.NullOr(Schema.Unknown), // null ou autre objet inconnu
     next: Schema.NullOr(
       Schema.Array(
@@ -78,10 +78,10 @@ export const PokemonSchema = Schema.Struct({
       )
     ),
     mega: Schema.NullOr(Schema.Unknown)
-  }),
+  })),
   height: Schema.String,
   weight: Schema.String,
-  egg_groups: Schema.Array(Schema.String),
+  egg_groups: Schema.NullOr(Schema.Array(Schema.String)),
   sexe: Schema.NullOr(
     Schema.Struct({
       male: Schema.Number,

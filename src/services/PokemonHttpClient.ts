@@ -30,7 +30,10 @@ export class PokemonHttpClient extends Effect.Service<PokemonHttpClient>()("Poke
           Match.type<typeof _e>().pipe(
             Match.tag("TimeoutException", () => new PokemonApiTimeOutError({ id })),
             Match.tag("RequestError", "ResponseError", () => new PokemonApiError({ id })),
-            Match.tag("ParseError", () => new PokemonApiParseError({ id })),
+            Match.tag("ParseError", (e) => {
+              console.log(e)
+              return new PokemonApiParseError({ id })
+            }),
             Match.exhaustive
           )(_e)
         )

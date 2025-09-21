@@ -10,5 +10,6 @@ export const HttpApiGroupAuthLive = (api: ApiType) =>
 
       return handlers
         .handle("sync", ({ payload }) => service.syncPokemon(payload.id))
+        .handle("getByPokedexId", ({ path }) => service.getByPokedexId(path.id))
     })
   }).pipe(Layer.provide([PokemonService.Default]))
