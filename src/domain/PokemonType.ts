@@ -156,3 +156,9 @@ export const PokemonStats = Schema.Struct({
 })
 
 export const Timestamp = Schema.DateFromString
+
+export const PokemonTypeId = Schema.UUID.pipe(Schema.brand("PokemonTypeId"))
+export type PokemonTypeId = typeof PokemonTypeId.Type
+
+export const PokemonTypeRelationId = Schema.UUID.pipe(Schema.brand("PokemonTypeId"))
+export type PokemonTypeRelationId = typeof PokemonTypeRelationId.Type

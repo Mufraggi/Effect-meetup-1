@@ -1,5 +1,4 @@
 import { Model } from "@effect/sql"
-import { Schema } from "effect"
 import {
   Attack,
   CatchRate,
@@ -87,28 +86,3 @@ export class PokemonTypeCreateModel extends Model.Class<PokemonTypeCreateModel>(
   name: TypeName,
   imageUrl: TypeImageUrl
 }) {}
-
-// Model pour la table de relation pokemon_type_relations
-export class PokemonTypeRelationModel extends Model.Class<PokemonTypeRelationModel>("PokemonTypeRelationModel")({
-  id: Model.Generated(Schema.UUID.pipe(Schema.brand("PokemonTypeRelationId"))),
-  pokemonId: PokemonId,
-  typeId: TypeId,
-  position: Schema.Number.pipe(
-    Schema.int(),
-    Schema.positive(),
-    Schema.brand("TypePosition")
-  )
-}) {}
-
-// Model pour créer une relation Pokemon-Type
-export class PokemonTypeRelationCreateModel
-  extends Model.Class<PokemonTypeRelationCreateModel>("PokemonTypeRelationCreateModel")({
-    pokemonId: PokemonId,
-    typeId: TypeId,
-    position: Schema.Number.pipe(
-      Schema.int(),
-      Schema.positive(),
-      Schema.brand("TypePosition")
-    )
-  })
-{}
