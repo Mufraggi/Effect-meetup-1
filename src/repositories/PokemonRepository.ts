@@ -6,7 +6,7 @@ import { PgLive } from "../utils/PgClient.js"
 export class PokemonRepository extends Effect.Service<PokemonRepository>()("PokemonRepository", {
   effect: Effect.gen(function*() {
     const repo = yield* Model.makeRepository(PokemonModel, {
-      tableName: "pokemon",
+      tableName: "pokemons",
       spanPrefix: "pokemon_repository",
       idColumn: "pokedexId"
     })

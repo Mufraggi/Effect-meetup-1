@@ -15,8 +15,6 @@ import {
   SpecialDefense,
   Speed,
   SpriteUrl,
-  TypeImageUrl,
-  TypeName,
   Weight
 } from "../domain/PokemonType.js"
 import type { PokemonCreateModel } from "../models/PokemonModel.js"
@@ -33,32 +31,29 @@ export class PokemonService extends Effect.Service<PokemonService>()("PokemonSer
     ) =>
       pipe(
         pokeClient.getPokemonById(id),
-        Effect.map((raw) => ({
-          pokedexId: PokedexId.make(raw.pokedex_id),
-          generation: Generation.make(raw.generation),
-          category: Category.make(raw.category),
-          name: {
-            fr: NameFr.make(raw.name.fr),
-            en: NameEn.make(raw.name.en),
-            jp: NameJp.make(raw.name.jp)
-          },
-          sprites: {
-            regular: SpriteUrl.make(raw.sprites.regular),
-            shiny: SpriteUrl.make(raw.sprites.shiny)
-          },
-          types: raw.types.map((t) => ({ name: TypeName.make(t.name), image: TypeImageUrl.make(t.image) })),
-          stats: {
-            hp: HP.make(raw.stats.hp),
-            atk: Attack.make(raw.stats.atk),
-            def: Defense.make(raw.stats.def),
-            spe_atk: SpecialAttack.make(raw.stats.spe_atk),
-            spe_def: SpecialDefense.make(raw.stats.spe_def),
-            vit: Speed.make(raw.stats.vit)
-          },
-          height: Height.make(raw.height),
-          weight: Weight.make(raw.weight),
-          catchRate: CatchRate.make(raw.catch_rate)
-        } satisfies PokemonCreateModel)),
+        Effect.map((raw) => {
+          console.log(raw.types)
+          const pokemon = {
+            pokedexId: PokedexId.make(raw.pokedex_id),
+            generation: Generation.make(raw.generation),
+            category: Category.make(raw.category),
+            nameEn: NameEn.make(raw.name.en),
+            nameFr: NameFr.make(raw.name.fr),
+            nameJp: NameJp.make(raw.name.jp),
+            spriteRegular: SpriteUrl.make(raw.sprites.regular),
+            spriteShiny: SpriteUrl.make(raw.sprites.shiny),
+            statHp: HP.make(raw.stats.hp),
+            statAtk: Attack.make(raw.stats.atk),
+            statDef: Defense.make(raw.stats.def),
+            statSpeAtk: SpecialAttack.make(raw.stats.spe_atk),
+            statSpeDef: SpecialDefense.make(raw.stats.spe_def),
+            statVit: Speed.make(raw.stats.vit),
+            height: Height.make(raw.height),
+            weight: Weight.make(raw.weight),
+            catchRate: CatchRate.make(raw.catch_rate)
+          } satisfies PokemonCreateModel
+          return pokemon
+        }),
         Effect.flatMap((pokemon) => pokeRepository.insert(pokemon)),
         Effect.map((res) => ({ id: res.pokedexId }))
       )

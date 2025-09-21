@@ -1,5 +1,10 @@
 import { Schema } from "effect"
 
+export const TypeId = Schema.UUID.pipe(
+  Schema.brand("TypeId")
+)
+export type TypeId = Schema.Schema.Type<typeof TypeId>
+
 export const PokemonId = Schema.UUID.pipe(
   Schema.brand("PokemonId")
 )
@@ -150,4 +155,4 @@ export const PokemonStats = Schema.Struct({
   vit: Speed
 })
 
-export const Timestamp = Schema.DateFromSelf
+export const Timestamp = Schema.DateFromString
